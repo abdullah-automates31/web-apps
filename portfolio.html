@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Automation Specialist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0c0c0e;
+            --surface: #141416;
+            --surface-light: #1c1c1f;
+            --border: #2a2a2e;
+            --border-subtle: #1f1f23;
+            --text: #e8e8ec;
+            --text-muted: #6b6b74;
+            --text-dim: #4a4a52;
+            --accent: #c4a77d;
+            --accent-glow: rgba(196, 167, 125, 0.08);
+            --accent-2: #7d9bc4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body { overflow-x: hidden; background: var(--bg); }
+
+        ::selection { background: var(--accent); color: var(--bg); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+        @media (max-width: 768px) { .container { padding: 0 20px; } }
+
+        /* ── Nav ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 24px 0;
+            transition: background 0.4s ease, backdrop-filter 0.4s ease;
+        }
+        nav.scrolled {
+            background: rgba(12, 12, 14, 0.85);
+            backdrop-filter: blur(20px) saturate(1.2);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        nav .container { display: flex; align-items: center; justify-content: space-between; }
+
+        .logo { font-family: 'Instrument Serif', serif; font-size: 1.4rem; color: var(--text); text-decoration: none; letter-spacing: -0.02em; }
+        .logo span { color: var(--accent); font-style: italic; }
+
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-links a {
+            font-size: 0.8rem; font-weight: 500; color: var(--text-muted);
+            text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase;
+            transition: color 0.3s ease; position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0;
+            height: 1px; background: var(--accent); transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-cta {
+            padding: 10px 24px; border: 1px solid var(--border); border-radius: 100px;
+            font-size: 0.75rem; font-weight: 600; color: var(--text); text-decoration: none;
+            letter-spacing: 0.05em; text-transform: uppercase;
+            transition: all 0.3s ease; background: transparent;
+        }
+        .nav-cta:hover { border-color: var(--accent); color: var(--accent); }
+
+        .mobile-menu-btn { display: none; background: none; border: none; color: var(--text); cursor: pointer; }
+        @media (max-width: 768px) { .nav-links { display: none; } .mobile-menu-btn { display: block; } }
+
+        /* ── Hero ── */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; position: relative;
+            padding: 120px 0 80px; overflow: hidden;
+        }
+        .hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(42,42,46,0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(42,42,46,0.3) 1px, transparent 1px);
+            background-size: 80px 80px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; pointer-events: none; }
+        .hero-orb-1 { width: 500px; height: 500px; background: var(--accent); top: -10%; right: -5%; }
+        .hero-orb-2 { width: 400px; height: 400px; background: var(--accent-2); bottom: -10%; left: -5%; opacity: 0.1; }
+
+        .hero-label {
+            font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent);
+            letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 32px;
+            opacity: 0; transform: translateY(20px);
+            animation: fadeUp 0.8s ease forwards;
+        }
+        .hero h1 {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(3.5rem, 8vw, 7rem); font-weight: 400;
+            line-height: 1.05; letter-spacing: -0.03em;
+            margin-bottom: 32px; max-width: 900px;
+        }
+        .hero h1 .line { display: block; overflow: hidden; }
+        .hero h1 .line span { display: block; transform: translateY(100%); animation: slideUp 1s cubic-bezier(0.16,1,0.3,1) forwards; }
+        .hero h1 .line:nth-child(1) span { animation-delay: 0.2s; }
+        .hero h1 .line:nth-child(2) span { animation-delay: 0.35s; }
+        .hero h1 .line:nth-child(3) span { animation-delay: 0.5s; }
+        .hero h1 em { color: var(--accent); font-style: italic; }
+
+        .hero-desc {
+            font-size: 1.1rem; color: var(--text-muted); max-width: 480px;
+            line-height: 1.7; margin-bottom: 48px;
+            opacity: 0; transform: translateY(20px);
+            animation: fadeUp 0.8s ease 0.7s forwards;
+        }
+        .hero-actions {
+            display: flex; gap: 16px; align-items: center;
+            opacity: 0; transform: translateY(20px);
+            animation: fadeUp 0.8s ease 0.9s forwards;
+        }
+
+        .btn-primary {
+            padding: 14px 32px; background: var(--accent); color: var(--bg);
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600;
+            letter-spacing: 0.02em; border: none; border-radius: 100px;
+            cursor: pointer; transition: all 0.3s ease; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(196,167,125,0.2); }
+
+        .btn-secondary {
+            padding: 14px 32px; background: transparent; color: var(--text);
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
+            letter-spacing: 0.02em; border: 1px solid var(--border); border-radius: 100px;
+            cursor: pointer; transition: all 0.3s ease; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-secondary:hover { border-color: var(--text-muted); background: var(--surface); }
+
+        .scroll-hint {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            opacity: 0; animation: fadeIn 1s ease 1.5s forwards;
+        }
+        .scroll-hint span { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; }
+        .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--text-dim), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+        @keyframes scrollPulse { 0%,100% { opacity:0.3; transform:scaleY(1); } 50% { opacity:1; transform:scaleY(1.2); } }
+
+        /* ── Sections ── */
+        section { position: relative; padding: 120px 0; }
+
+        .section-header { margin-bottom: 80px; }
+        .section-label { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 16px; }
+        .section-title { font-family: 'Instrument Serif', serif; font-size: clamp(2.5rem,5vw,4rem); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; max-width: 600px; }
+        .section-title em { color: var(--accent); font-style: italic; }
+
+        /* ── About ── */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+        @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+        .about-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: 40px; position: relative; overflow: hidden;
+        }
+        .about-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.5;
+        }
+        .about-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(196,167,125,0.4); } 50% { opacity:0.8; box-shadow:0 0 0 8px rgba(196,167,125,0); } }
+        .about-card-header span { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.1em; }
+
+        .skill-item { margin-bottom: 24px; }
+        .skill-item:last-child { margin-bottom: 0; }
+        .skill-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .skill-name { font-size: 0.85rem; color: var(--text); font-weight: 500; }
+        .skill-level { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-muted); }
+        .skill-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+        .skill-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 2px; width: 0; transition: width 1.5s cubic-bezier(0.16,1,0.3,1); }
+
+        .about-text p { font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 24px; }
+        .about-text p strong { color: var(--text); font-weight: 500; }
+
+        .tech-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+        .tech-tag {
+            padding: 8px 16px; background: var(--surface); border: 1px solid var(--border);
+            border-radius: 100px; font-size: 0.75rem; color: var(--text-muted);
+            letter-spacing: 0.02em; transition: all 0.3s ease;
+        }
+        .tech-tag:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+
+        /* ── Services ── */
+        .services-section { background: var(--surface); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+        .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border-radius: 16px; overflow: hidden; }
+        @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
+
+        .service-cell { background: var(--surface); padding: 48px 40px; transition: all 0.4s ease; position: relative; overflow: hidden; }
+        .service-cell::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+        }
+        .service-cell:hover { background: var(--surface-light); }
+        .service-cell:hover::before { transform: scaleX(1); }
+
+        .service-number { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.1em; margin-bottom: 24px; }
+        .service-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            background: var(--surface-light); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent); margin-bottom: 24px; transition: all 0.3s ease;
+        }
+        .service-cell:hover .service-icon { background: var(--accent-glow); border-color: var(--accent); transform: translateY(-2px); }
+        .service-title { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 12px; letter-spacing: -0.01em; }
+        .service-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+        /* ── Process ── */
+        .process-timeline { position: relative; max-width: 800px; margin: 0 auto; }
+        .process-timeline::before {
+            content: ''; position: absolute; left: 24px; top: 0; bottom: 0; width: 1px;
+            background: linear-gradient(to bottom, var(--accent), var(--accent-2), transparent); opacity: 0.3;
+        }
+        .process-step { display: flex; gap: 40px; margin-bottom: 64px; position: relative; }
+        .process-step:last-child { margin-bottom: 0; }
+        .process-marker {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--surface); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent);
+            flex-shrink: 0; position: relative; z-index: 2; transition: all 0.3s ease;
+        }
+        .process-step:hover .process-marker { border-color: var(--accent); background: var(--accent-glow); box-shadow: 0 0 20px rgba(196,167,125,0.1); }
+        .process-content h3 { font-size: 1.3rem; font-weight: 600; color: var(--text); margin-bottom: 8px; letter-spacing: -0.01em; }
+        .process-content p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; max-width: 500px; }
+
+        /* ── Testimonial ── */
+        .testimonial-section { background: var(--surface); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+        .testimonial-card { max-width: 800px; margin: 0 auto; text-align: center; padding: 40px 0; }
+        .testimonial-quote {
+            font-family: 'Instrument Serif', serif; font-size: clamp(1.5rem,3vw,2.2rem);
+            line-height: 1.4; color: var(--text); margin-bottom: 40px; font-style: italic;
+        }
+        .testimonial-quote::before { content: '"'; color: var(--accent); font-size: 3rem; line-height: 0; display: block; margin-bottom: 20px; font-style: normal; }
+        .testimonial-author { display: flex; align-items: center; justify-content: center; gap: 16px; }
+        .author-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--surface-light); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--accent); font-weight: 700;
+        }
+        .author-name { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+        .author-role { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* ── Booking Section ── */
+        .booking-section {
+            background: var(--bg);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .booking-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 80px;
+            align-items: start;
+        }
+        @media (max-width: 768px) { .booking-wrapper { grid-template-columns: 1fr; gap: 48px; } }
+
+        .booking-left h2 {
+            font-family: 'Instrument Serif', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400; line-height: 1.15; margin-bottom: 16px;
+        }
+        .booking-left h2 em { color: var(--accent); font-style: italic; }
+        .booking-left > p {
+            font-size: 1rem; color: var(--text-muted);
+            line-height: 1.7; margin-bottom: 36px;
+        }
+
+        .booking-meta { display: flex; flex-direction: column; gap: 18px; }
+        .booking-meta-item { display: flex; align-items: flex-start; gap: 14px; }
+        .booking-meta-icon {
+            width: 38px; height: 38px; border-radius: 10px;
+            background: var(--surface); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent); flex-shrink: 0;
+        }
+        .booking-meta-text strong { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+        .booking-meta-text span { font-size: 0.82rem; color: var(--text-muted); }
+
+        /* ── Booking Card ── */
+        .booking-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .booking-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .booking-card-header {
+            padding: 28px 36px 24px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .booking-card-title {
+            font-family: 'Instrument Serif', serif;
+            font-size: 1.3rem; color: var(--text); font-weight: 400;
+        }
+        .booking-card-title em { color: var(--accent); font-style: italic; }
+        .booking-card-badge {
+            font-family: 'Space Mono', monospace; font-size: 0.65rem;
+            color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase;
+            padding: 5px 12px; border: 1px solid rgba(196,167,125,0.3);
+            border-radius: 100px; background: var(--accent-glow);
+        }
+
+        .booking-card-body { padding: 32px 36px 36px; }
+
+        /* Form inside booking card */
+        .bk-form-group { margin-bottom: 20px; }
+
+        .bk-label {
+            display: block; font-size: 0.72rem; font-weight: 500;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: var(--text-muted); margin-bottom: 8px;
+        }
+
+        .bk-input, .bk-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            transition: all 0.25s ease;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .bk-input::placeholder { color: var(--text-dim); }
+        .bk-input:focus, .bk-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+            background: var(--surface-light);
+        }
+        .bk-input.bk-error, .bk-select.bk-error { border-color: #e05252; }
+
+        .bk-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b6b74' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+        .bk-select option { background: var(--surface); color: var(--text); }
+
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.4); cursor: pointer;
+        }
+
+        .bk-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 480px) { .bk-row { grid-template-columns: 1fr; } }
+
+        .bk-field-error { font-size: 0.72rem; color: #e05252; margin-top: 5px; display: none; }
+
+        .bk-submit {
+            width: 100%; padding: 14px;
+            background: var(--accent); color: var(--bg);
+            font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600;
+            border: none; border-radius: 10px; cursor: pointer; margin-top: 8px;
+            letter-spacing: 0.02em;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .bk-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(196,167,125,0.25); }
+        .bk-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .bk-spinner {
+            width: 15px; height: 15px;
+            border: 2px solid rgba(12,12,14,0.3);
+            border-top-color: var(--bg);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Success */
+        .bk-success {
+            display: none; padding: 48px 36px;
+            text-align: center;
+        }
+        .bk-success-icon {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: rgba(196,167,125,0.12);
+            border: 1px solid rgba(196,167,125,0.3);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--accent); font-size: 22px;
+        }
+        .bk-success-title { font-family: 'Instrument Serif', serif; font-size: 1.8rem; color: var(--text); margin-bottom: 8px; }
+        .bk-success-sub { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 28px; }
+
+        .bk-pills { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; text-align: left; }
+        .bk-pill {
+            background: var(--surface-light); border: 1px solid var(--border);
+            border-radius: 10px; padding: 10px 16px;
+            font-size: 0.82rem; color: var(--text-muted);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .bk-pill span { font-size: 14px; }
+
+        .bk-reset {
+            width: 100%; padding: 13px;
+            background: transparent; border: 1px solid var(--border);
+            border-radius: 10px; color: var(--text-muted);
+            font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .bk-reset:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+
+        .booking-card-footer {
+            padding: 16px 36px; border-top: 1px solid var(--border-subtle);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .bk-footer-text { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+        .bk-footer-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2s ease-in-out infinite; }
+
+        /* ── Contact ── */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: start; }
+        @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+        .contact-info h2 { font-family: 'Instrument Serif', serif; font-size: clamp(2rem,4vw,3rem); font-weight: 400; line-height: 1.15; margin-bottom: 24px; }
+        .contact-info h2 em { color: var(--accent); font-style: italic; }
+        .contact-info > p { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 48px; }
+
+        .contact-detail { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+        .contact-detail-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--accent); flex-shrink: 0; }
+        .contact-detail-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+        .contact-detail-text strong { display: block; color: var(--text); font-weight: 500; margin-bottom: 2px; }
+        .contact-detail-text a { color: var(--text-muted); text-decoration: none; transition: color 0.3s ease; }
+        .contact-detail-text a:hover { color: var(--accent); }
+
+        .social-links { display: flex; gap: 12px; margin-top: 40px; }
+        .social-link {
+            width: 44px; height: 44px; border-radius: 12px;
+            background: var(--surface); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); transition: all 0.3s ease; text-decoration: none;
+        }
+        .social-link:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); transform: translateY(-2px); }
+
+        /* Contact form */
+        .contact-form { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 48px; }
+        @media (max-width: 768px) { .contact-form { padding: 32px 24px; } }
+
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 0.02em; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 14px 16px; background: var(--bg);
+            border: 1px solid var(--border); border-radius: 10px;
+            color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.95rem;
+            transition: all 0.3s ease; outline: none;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .form-group input::placeholder, .form-group textarea::placeholder { color: var(--text-dim); }
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b6b74' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px;
+        }
+        .form-group select option { background: var(--surface); color: var(--text); }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .form-submit {
+            width: 100%; padding: 16px; background: var(--accent); color: var(--bg);
+            font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600;
+            border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .form-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(196,167,125,0.25); }
+
+        /* ── Footer ── */
+        footer { padding: 48px 0; border-top: 1px solid var(--border-subtle); }
+        footer .container { display: flex; justify-content: space-between; align-items: center; }
+        @media (max-width: 768px) { footer .container { flex-direction: column; gap: 16px; text-align: center; } }
+        .footer-logo { font-family: 'Instrument Serif', serif; font-size: 1.2rem; color: var(--text); }
+        .footer-logo span { color: var(--accent); font-style: italic; }
+        .footer-copy { font-size: 0.8rem; color: var(--text-dim); }
+
+        /* ── Toast ── */
+        .booking-toast {
+            position: fixed; bottom: 24px; left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #2a1a1a; border: 1px solid #e05252;
+            color: #e05252; padding: 12px 22px; border-radius: 10px;
+            font-size: 0.8rem; opacity: 0;
+            transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+            z-index: 999; white-space: nowrap;
+        }
+        .booking-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ── Animations ── */
+        @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+        @keyframes slideUp { to { transform:translateY(0); } }
+        @keyframes fadeIn { to { opacity:1; } }
+
+        .reveal { opacity:0; transform:translateY(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .stagger-parent > .reveal { transition-delay: calc(var(--i,0) * 0.1s); }
+
+        .divider { height:1px; background:linear-gradient(90deg, transparent, var(--border), transparent); margin:0 auto; max-width:200px; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container">
+            <a href="#" class="logo">Auto<span>Flow</span></a>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#process">Process</a>
+                <a href="#booking">Book a Call</a>
+                <a href="#contact" class="nav-cta">Let's Talk</a>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i data-lucide="menu" style="width:24px;height:24px;"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" style="display:none;position:fixed;inset:0;z-index:200;background:var(--bg);padding:80px 32px;">
+        <button onclick="toggleMobileMenu()" style="position:absolute;top:24px;right:32px;background:none;border:none;color:var(--text);cursor:pointer;">
+            <i data-lucide="x" style="width:24px;height:24px;"></i>
+        </button>
+        <div style="display:flex;flex-direction:column;gap:32px;">
+            <a href="#about"    onclick="toggleMobileMenu()" style="font-family:'Instrument Serif',serif;font-size:2rem;color:var(--text);text-decoration:none;">About</a>
+            <a href="#services" onclick="toggleMobileMenu()" style="font-family:'Instrument Serif',serif;font-size:2rem;color:var(--text);text-decoration:none;">Services</a>
+            <a href="#process"  onclick="toggleMobileMenu()" style="font-family:'Instrument Serif',serif;font-size:2rem;color:var(--text);text-decoration:none;">Process</a>
+            <a href="#booking"  onclick="toggleMobileMenu()" style="font-family:'Instrument Serif',serif;font-size:2rem;color:var(--text);text-decoration:none;">Book a Call</a>
+            <a href="#contact"  onclick="toggleMobileMenu()" style="font-family:'Instrument Serif',serif;font-size:2rem;color:var(--accent);text-decoration:none;font-style:italic;">Let's Talk</a>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="container" style="position:relative;z-index:2;">
+            <div class="hero-label">AI Automation Specialist</div>
+            <h1>
+                <span class="line"><span>Building systems</span></span>
+                <span class="line"><span>that <em>think</em> and</span></span>
+                <span class="line"><span><em>work</em> for you.</span></span>
+            </h1>
+            <p class="hero-desc">I design intelligent automation architectures that eliminate repetitive work, integrate AI seamlessly into your operations, and scale as you grow.</p>
+            <div class="hero-actions">
+                <a href="#booking" class="btn-primary">
+                    <i data-lucide="calendar" style="width:16px;height:16px;"></i>
+                    Book a Meeting
+                </a>
+                <a href="mailto:iamabdull29@gmail.com" class="btn-secondary">
+                    <i data-lucide="mail" style="width:16px;height:16px;"></i>
+                    Email Me
+                </a>
+            </div>
+        </div>
+        <div class="scroll-hint">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">01 / About</div>
+                <h2 class="section-title">Turning complexity into <em>automated clarity</em></h2>
+            </div>
+            <div class="about-grid">
+                <div class="about-visual reveal">
+                    <div class="about-card">
+                        <div class="about-card-header">
+                            <div class="status-dot"></div>
+                            <span>System Status — Online</span>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header"><span class="skill-name">Workflow Automation</span><span class="skill-level">95%</span></div>
+                            <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header"><span class="skill-name">AI Integration</span><span class="skill-level">90%</span></div>
+                            <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header"><span class="skill-name">Process Optimization</span><span class="skill-level">92%</span></div>
+                            <div class="skill-bar"><div class="skill-fill" data-width="92"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header"><span class="skill-name">No-Code Architecture</span><span class="skill-level">88%</span></div>
+                            <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-text reveal reveal-delay-2">
+                    <p>I specialize in designing <strong>intelligent automation systems</strong> that transform how businesses operate. From connecting disparate tools through sophisticated workflows to building AI agents that handle complex decision-making, I create infrastructure that works while you sleep.</p>
+                    <p>My approach is <strong>architectural</strong> — I don't just automate tasks, I design systems that are resilient, scalable, and adaptive. Every automation I build is documented, monitored, and built to evolve with your business.</p>
+                    <p>Whether you're drowning in manual data entry, struggling with lead follow-up, or looking to integrate AI into your existing stack — I build the bridge between where you are and where you want to be.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Make.com</span><span class="tech-tag">Zapier</span><span class="tech-tag">n8n</span>
+                        <span class="tech-tag">OpenAI</span><span class="tech-tag">Claude</span><span class="tech-tag">Python</span>
+                        <span class="tech-tag">Airtable</span><span class="tech-tag">Notion</span><span class="tech-tag">HubSpot</span>
+                        <span class="tech-tag">Slack API</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Services -->
+    <section id="services" class="services-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">02 / Services</div>
+                <h2 class="section-title">What I <em>build</em> for you</h2>
+            </div>
+            <div class="services-grid stagger-parent">
+                <div class="service-cell reveal" style="--i:0">
+                    <div class="service-number">01</div>
+                    <div class="service-icon"><i data-lucide="workflow" style="width:20px;height:20px;"></i></div>
+                    <h3 class="service-title">Workflow Automation</h3>
+                    <p class="service-desc">Multi-step process orchestration connecting your entire tech stack. Eliminate manual handoffs and data entry between tools.</p>
+                </div>
+                <div class="service-cell reveal" style="--i:1">
+                    <div class="service-number">02</div>
+                    <div class="service-icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></div>
+                    <h3 class="service-title">AI Integration</h3>
+                    <p class="service-desc">Embed GPT-4, Claude, and custom LLMs into your workflows. Build intelligent agents that understand context and make decisions.</p>
+                </div>
+                <div class="service-cell reveal" style="--i:2">
+                    <div class="service-number">03</div>
+                    <div class="service-icon"><i data-lucide="message-circle" style="width:20px;height:20px;"></i></div>
+                    <h3 class="service-title">Conversational AI</h3>
+                    <p class="service-desc">Custom chatbots and voice assistants for customer support, lead qualification, and internal knowledge management.</p>
+                </div>
+                <div class="service-cell reveal" style="--i:3">
+                    <div class="service-number">04</div>
+                    <div class="service-icon"><i data-lucide="database" style="width:20px;height:20px;"></i></div>
+                    <h3 class="service-title">CRM Automation</h3>
+                    <p class="service-desc">Automated pipeline management, lead scoring, follow-up sequences, and data hygiene that keeps your CRM working for you.</p>
+                </div>
+                <div class="service-cell reveal" style="--i:4">
+                    <div class="service-number">05</div>
+                    <div class="service-icon"><i data-lucide="mail" style="width:20px;height:20px;"></i></div>
+                    <h3 class="service-title">Email Automation</h3>
+                    <p class="service-desc">Sophisticated sequences, personalized outreach at scale, and automated follow-up systems that convert without feeling robotic.</p>
+                </div>
+                <div class="service-cell reveal" style="--i:5">
+                    <div class="service-number">06</div>
+                    <div class="service-icon"><i data-lucide="line-chart" style="width:20px;height:20px;"></i></div>
+                    <h3 class="service-title">Process Analytics</h3>
+                    <p class="service-desc">Audit existing workflows, identify bottlenecks, measure automation ROI, and build continuous improvement loops.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process -->
+    <section id="process">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">03 / Process</div>
+                <h2 class="section-title">How we <em>work</em> together</h2>
+            </div>
+            <div class="process-timeline">
+                <div class="process-step reveal">
+                    <div class="process-marker">01</div>
+                    <div class="process-content">
+                        <h3>Discovery</h3>
+                        <p>We map your current processes, identify pain points, and define success metrics. I audit your tech stack and document every touchpoint before writing a single automation.</p>
+                    </div>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-marker">02</div>
+                    <div class="process-content">
+                        <h3>Architecture</h3>
+                        <p>I design the optimal automation blueprint — selecting the right tools, defining data flows, and building error-handling strategies that keep your system resilient.</p>
+                    </div>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-marker">03</div>
+                    <div class="process-content">
+                        <h3>Build & Test</h3>
+                        <p>Every automation is built with rigorous testing, edge-case handling, and full documentation. You get a system that works reliably from day one.</p>
+                    </div>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-marker">04</div>
+                    <div class="process-content">
+                        <h3>Optimize</h3>
+                        <p>Post-launch monitoring, performance tuning, and continuous refinement. I ensure your automations scale as your business grows and evolves.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="testimonial-section">
+        <div class="container">
+            <div class="testimonial-card reveal">
+                <p class="testimonial-quote">The automation system he built saved us 40+ hours per week on manual data entry. Our team finally has space to think strategically instead of managing spreadsheets.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">JD</div>
+                    <div class="author-info">
+                        <div class="author-name">Jane Doe</div>
+                        <div class="author-role">CEO, TechStart Inc.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── BOOK A MEETING ── -->
+    <section id="booking" class="booking-section">
+        <div class="container">
+            <div class="booking-wrapper">
+
+                <!-- Left: info -->
+                <div class="booking-left reveal">
+                    <div class="section-label">04 / Book a Meeting</div>
+                    <h2>Schedule a <em>free</em> discovery call</h2>
+                    <p>Pick a time that works for you. Once confirmed, you'll get an email with all the details and I'll reach out beforehand to prepare.</p>
+
+                    <div class="booking-meta">
+                        <div class="booking-meta-item">
+                            <div class="booking-meta-icon">
+                                <i data-lucide="clock" style="width:17px;height:17px;"></i>
+                            </div>
+                            <div class="booking-meta-text">
+                                <strong>Duration</strong>
+                                <span>15 – 120 minutes, your choice</span>
+                            </div>
+                        </div>
+                        <div class="booking-meta-item">
+                            <div class="booking-meta-icon">
+                                <i data-lucide="video" style="width:17px;height:17px;"></i>
+                            </div>
+                            <div class="booking-meta-text">
+                                <strong>Format</strong>
+                                <span>Google Meet, Zoom, or WhatsApp Call</span>
+                            </div>
+                        </div>
+                        <div class="booking-meta-item">
+                            <div class="booking-meta-icon">
+                                <i data-lucide="zap" style="width:17px;height:17px;"></i>
+                            </div>
+                            <div class="booking-meta-text">
+                                <strong>Instant Confirmation</strong>
+                                <span>Automated — no waiting for approval</span>
+                            </div>
+                        </div>
+                        <div class="booking-meta-item">
+                            <div class="booking-meta-icon">
+                                <i data-lucide="globe" style="width:17px;height:17px;"></i>
+                            </div>
+                            <div class="booking-meta-text">
+                                <strong>Timezone</strong>
+                                <span>Works with any timezone worldwide</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: booking card -->
+                <div class="reveal reveal-delay-2">
+                    <div class="booking-card">
+                        <div class="booking-card-header">
+                            <div class="booking-card-title">Book a <em>meeting</em></div>
+                            <div class="booking-card-badge">Instant confirm</div>
+                        </div>
+
+                        <!-- Form -->
+                        <div class="booking-card-body" id="bkFormSection">
+                            <form id="bookingForm" novalidate>
+
+                                <div class="bk-form-group">
+                                    <label class="bk-label" for="bkTitle">Meeting Title</label>
+                                    <input class="bk-input" type="text" id="bkTitle" placeholder="e.g. Discovery Call" autocomplete="off"/>
+                                    <div class="bk-field-error" id="bkTitleErr">Please enter a meeting title.</div>
+                                </div>
+
+                                <div class="bk-form-group">
+                                    <label class="bk-label" for="bkEmail">Your Email</label>
+                                    <input class="bk-input" type="email" id="bkEmail" placeholder="you@example.com"/>
+                                    <div class="bk-field-error" id="bkEmailErr">Please enter a valid email.</div>
+                                </div>
+
+                                <div class="bk-row">
+                                    <div class="bk-form-group">
+                                        <label class="bk-label" for="bkDate">Date</label>
+                                        <input class="bk-input" type="date" id="bkDate"/>
+                                        <div class="bk-field-error" id="bkDateErr">Pick a date.</div>
+                                    </div>
+                                    <div class="bk-form-group">
+                                        <label class="bk-label" for="bkTime">Time</label>
+                                        <input class="bk-input" type="time" id="bkTime"/>
+                                        <div class="bk-field-error" id="bkTimeErr">Pick a time.</div>
+                                    </div>
+                                </div>
+
+                                <div class="bk-form-group">
+                                    <label class="bk-label" for="bkDuration">Duration</label>
+                                    <select class="bk-select" id="bkDuration">
+                                        <option value="15">15 minutes</option>
+                                        <option value="30" selected>30 minutes</option>
+                                        <option value="45">45 minutes</option>
+                                        <option value="60">1 hour</option>
+                                        <option value="90">1.5 hours</option>
+                                        <option value="120">2 hours</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="bk-submit" id="bkSubmitBtn">
+                                    <div class="bk-spinner" id="bkSpinner"></div>
+                                    <span id="bkBtnText">Confirm Meeting →</span>
+                                </button>
+
+                            </form>
+                        </div>
+
+                        <!-- Success screen -->
+                        <div class="bk-success" id="bkSuccess">
+                            <div class="bk-success-icon">✓</div>
+                            <div class="bk-success-title">You're all set!</div>
+                            <p class="bk-success-sub">Confirmation details have been sent to your email.</p>
+                            <div class="bk-pills" id="bkPills"></div>
+                            <button class="bk-reset" onclick="resetBookingForm()">Book another meeting</button>
+                        </div>
+
+                        <div class="booking-card-footer" id="bkCardFooter">
+                            <span class="bk-footer-text">Powered by n8n automation</span>
+                            <div class="bk-footer-dot"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-info reveal">
+                    <div class="section-label">05 / Contact</div>
+                    <h2>Let's build something <em>intelligent</em></h2>
+                    <p>Ready to eliminate repetitive work and scale your operations? Reach out directly — I respond within 24 hours.</p>
+
+                    <div class="contact-detail">
+                        <div class="contact-detail-icon"><i data-lucide="mail" style="width:18px;height:18px;"></i></div>
+                        <div class="contact-detail-text">
+                            <strong>Email</strong>
+                            <a href="mailto:iamabdull29@gmail.com">iamabdull29@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <div class="contact-detail-icon"><i data-lucide="phone" style="width:18px;height:18px;"></i></div>
+                        <div class="contact-detail-text">
+                            <strong>WhatsApp</strong>
+                            <a href="https://wa.me/923323524005" target="_blank">+92 332 3524005</a>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <div class="contact-detail-icon"><i data-lucide="globe" style="width:18px;height:18px;"></i></div>
+                        <div class="contact-detail-text"><strong>Location</strong>Remote — Worldwide</div>
+                    </div>
+                    <div class="contact-detail">
+                        <div class="contact-detail-icon"><i data-lucide="clock" style="width:18px;height:18px;"></i></div>
+                        <div class="contact-detail-text"><strong>Availability</strong>Monday — Friday, 9AM to 6PM EST</div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="https://wa.me/923323524005" target="_blank" class="social-link" title="WhatsApp"><i data-lucide="message-circle" style="width:18px;height:18px;"></i></a>
+                        <a href="mailto:iamabdull29@gmail.com" class="social-link" title="Email"><i data-lucide="mail" style="width:18px;height:18px;"></i></a>
+                        <a href="#" class="social-link" title="LinkedIn"><i data-lucide="linkedin" style="width:18px;height:18px;"></i></a>
+                        <a href="#" class="social-link" title="Twitter"><i data-lucide="twitter" style="width:18px;height:18px;"></i></a>
+                        <a href="#" class="social-link" title="GitHub"><i data-lucide="github" style="width:18px;height:18px;"></i></a>
+                    </div>
+                </div>
+
+                <div class="contact-form reveal reveal-delay-2">
+                    <form onsubmit="event.preventDefault(); alert('Thanks for reaching out! I will get back to you within 24 hours.');">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" placeholder="you@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Project Type</label>
+                            <select>
+                                <option>Workflow Automation</option>
+                                <option>AI Integration</option>
+                                <option>Chatbot Development</option>
+                                <option>CRM Automation</option>
+                                <option>Process Audit</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea placeholder="Tell me about your project, current tools, and what you're looking to automate..."></textarea>
+                        </div>
+                        <button type="submit" class="form-submit">
+                            Send Message
+                            <i data-lucide="send" style="width:16px;height:16px;"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Auto<span>Flow</span></div>
+            <div class="footer-copy">© 2026 AI Automation Specialist. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <div class="booking-toast" id="bookingToast"></div>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>
+        // ── YOUR N8N WEBHOOK ──────────────────────────────────────────────────
+        const N8N_WEBHOOK_URL = 'https://oncogenic-cavilingly-shae.ngrok-free.dev/webhook/meeting-scheduler-webhook';
+        // ─────────────────────────────────────────────────────────────────────
+
+        lucide.createIcons();
+
+        // Nav scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const open = menu.style.display === 'none' || menu.style.display === '';
+            menu.style.display = open ? 'block' : 'none';
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+
+        // Smooth anchor scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const t = document.querySelector(this.getAttribute('href'));
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Reveal on scroll
+        const revealObs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    entry.target.querySelectorAll('.skill-fill').forEach(fill => {
+                        fill.style.width = fill.getAttribute('data-width') + '%';
+                    });
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+        // Set min date for booking
+        document.getElementById('bkDate').min = new Date().toISOString().split('T')[0];
+
+        // Booking toast
+        function showBookingToast(msg) {
+            const t = document.getElementById('bookingToast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 4500);
+        }
+
+        // Booking validation
+        function bkSetError(inputId, errId, show) {
+            const el = document.getElementById(inputId);
+            const err = document.getElementById(errId);
+            el.classList.toggle('bk-error', show);
+            err.style.display = show ? 'block' : 'none';
+        }
+
+        function bkValidate() {
+            let valid = true;
+            const title = document.getElementById('bkTitle').value.trim();
+            const email = document.getElementById('bkEmail').value.trim();
+            const date  = document.getElementById('bkDate').value;
+            const time  = document.getElementById('bkTime').value;
+
+            bkSetError('bkTitle', 'bkTitleErr', !title);         if (!title) valid = false;
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            bkSetError('bkEmail', 'bkEmailErr', !emailOk);       if (!emailOk) valid = false;
+            bkSetError('bkDate',  'bkDateErr',  !date);          if (!date)  valid = false;
+            bkSetError('bkTime',  'bkTimeErr',  !time);          if (!time)  valid = false;
+            return valid;
+        }
+
+        // Booking form submit
+        document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!bkValidate()) return;
+
+            const btn     = document.getElementById('bkSubmitBtn');
+            const spinner = document.getElementById('bkSpinner');
+            const btnText = document.getElementById('bkBtnText');
+
+            btn.disabled = true;
+            spinner.style.display = 'block';
+            btnText.textContent = 'Booking…';
+
+            const payload = {
+                'Meeting Title':              document.getElementById('bkTitle').value.trim(),
+                'Guest Email Address':        document.getElementById('bkEmail').value.trim(),
+                'Meeting Date':               document.getElementById('bkDate').value,
+                'Meeting Time':               document.getElementById('bkTime').value,
+                'Meeting Duration (minutes)': document.getElementById('bkDuration').value
+            };
+
+            try {
+                const res = await fetch(N8N_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) throw new Error('Status ' + res.status);
+
+                const d = new Date(`${payload['Meeting Date']}T${payload['Meeting Time']}`);
+                const dateStr = d.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+                const timeStr = d.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+
+                document.getElementById('bkPills').innerHTML =
+                    `<div class="bk-pill"><span>📌</span>${payload['Meeting Title']}</div>
+                     <div class="bk-pill"><span>📅</span>${dateStr} at ${timeStr}</div>
+                     <div class="bk-pill"><span>📧</span>${payload['Guest Email Address']}</div>
+                     <div class="bk-pill"><span>⏱</span>${payload['Meeting Duration (minutes)']} minutes</div>`;
+
+                document.getElementById('bkFormSection').style.display  = 'none';
+                document.getElementById('bkSuccess').style.display       = 'block';
+                document.getElementById('bkCardFooter').style.display    = 'none';
+
+            } catch (err) {
+                console.error(err);
+                showBookingToast('Could not reach n8n. Make sure the workflow is active.');
+                btn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.textContent = 'Confirm Meeting →';
+            }
+        });
+
+        // Reset booking form
+        function resetBookingForm() {
+            document.getElementById('bookingForm').reset();
+            document.getElementById('bkFormSection').style.display  = 'block';
+            document.getElementById('bkSuccess').style.display       = 'none';
+            document.getElementById('bkCardFooter').style.display    = 'flex';
+            document.getElementById('bkSubmitBtn').disabled          = false;
+            document.getElementById('bkSpinner').style.display       = 'none';
+            document.getElementById('bkBtnText').textContent         = 'Confirm Meeting →';
+            ['bkTitle','bkEmail','bkDate','bkTime'].forEach(id => {
+                document.getElementById(id).classList.remove('bk-error');
+            });
+            ['bkTitleErr','bkEmailErr','bkDateErr','bkTimeErr'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
